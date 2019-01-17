@@ -2,13 +2,21 @@ require 'rubygems'
 require 'nokogiri'  
 require 'open-uri'
 
-page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))   
-page.css('//span[contains(text(),"Go")]').each do |el|
-puts el.text
+
+def crypto_scrapper
+    page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))   
+
+    currencies = []
+    page.xpath('//span//a').each do |crypto|
+        currencies << crypto.text
+    end
+
+    values = []
+    page.xpath('//a[@class="price"]').each do |value|
+        values << value.text
+    end
+
+    hash = currencies.zip(values).to_h
 end
-#array_currency.push()
 
-
-
-#//div[@id="currencies-all_wrapper"]
-#//td[@class="currency-name"]//a[@class="currency-name-container"]
+puts crypto_scrapper
