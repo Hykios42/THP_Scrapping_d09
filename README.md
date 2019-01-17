@@ -12,6 +12,5 @@
 
  - [x] Exo 01: Crypto_currencies.rb : **OK**
  - [x] Exo 02: Cityhall.rb : **OK**
- - [ ] Exo 03: Assemblée.rb **Coming Soon**
+ - [x] Exo 03: Assemblée.rb **Ok ?**
 
-![](http://i.imgur.com/OUkLi.gif)
