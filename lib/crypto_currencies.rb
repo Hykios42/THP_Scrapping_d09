@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 
 page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))   
-page.css('//span//a').each do |el|
+page.css('//span[contains(text(),"Go")]').each do |el|
 puts el.text
 end
 #array_currency.push()
