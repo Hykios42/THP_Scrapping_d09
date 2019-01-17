@@ -4,29 +4,42 @@ require 'pry'
 
 # Récupère l'adresse email , prend en parametre le liens de la page de la mairie 
 def get_townhall_email(townhall_url)
-    arr_email = []
-    page = Nokogiri::HTML(open(townhall_url))   
-    page.xpath('//td[contains(text(),"@")]').each do |el|
-         arr_email.push(el.text)
+    email = []
+    page = Nokogiri::HTML(open(townhall_url))
+    page.xpath('//td[contains(text(), "@")]').each do |el|
+        email.push(el.text)
     end
-    puts arr_email
+    return email
 end
 
-# récupére la liste de tout les liens redirigeant vers les pages de chaque mairie
 def get_townhall_urls
-    arr_mairies = []
+    arr_url = []
+    arr_names = []
+    arr_email = []
+
+    # récupére la liste de tout les liens redirigeant vers les pages de chaque mairie
     page = Nokogiri::HTML(open("http://annuaire-des-mairies.com/val-d-oise.html"))
     page.xpath('//a[contains(@href, "95")]/@href').each do |el|
-        arr_mairies.push(el.value)
+        arr_url.push(el.value)
     end
-    # boucle pour formaté les liens des mairies & appel de get_townhall_email
-    arr_mairies.each do |elem|
-        elem = elem[1..-1]
-        tmp_str = "https://www.annuaire-des-mairies.com" + elem
-        get_townhall_email(tmp_str)
+
+    # Boucle pour récupéré le nom de chaque ville
+    name = Nokogiri::HTML(open("http://annuaire-des-mairies.com/val-d-oise.html"))
+    name.xpath('//a[contains(@href, "95")]').each do |el|
+        arr_names.push(el.text)
     end
+    # boucle pour formaté l'url @ récupéré chaque email @ cette url
+    arr_url.each do |el|
+        el = el[1..-1]
+        tmp_str = "https://www.annuaire-des-mairies.com" + el
+        arr_email.push(get_townhall_email(tmp_str))
+    end
+    # Création du hash final
+    my_hash = arr_names.zip(arr_email).to_h
+
+    # Le print pour vérifié que c'est bon est la <3
+    # puts my_hash
 end
 
-# TEST façon mage noir
-# get_townhall_email("https://www.annuaire-des-mairies.com/95/avernes.html")
-# get_townhall_urls
+get_townhall_urls
+
